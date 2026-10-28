@@ -1,0 +1,63 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* Paleta original del tema de Blogger (cfacartesianlanguages.blogspot.com) */
+@theme {
+  --color-brand: #23b379;
+  --color-brand-dark: #1c9463;
+  --color-ink: #262626; /* títulos */
+  --color-body: #757575; /* texto */
+  --color-muted: #979797; /* metadatos */
+  --color-logo: #3c3c3c;
+  --color-tagline: #797979;
+  --color-surface: #f2f2f2; /* cabecera, tarjetas, pie */
+  --color-nav: #232323; /* barra de menú */
+  --color-footer: #131313; /* barra inferior */
+  --color-soft: #adadad;
+  --color-sage: #2c3e50; /* chatbot Descartes */
+
+  --font-display: var(--font-oswald), "Oswald", sans-serif;
+  --font-sans: var(--font-roboto), "Roboto", sans-serif;
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-white text-body font-sans antialiased; }
+  h1, h2, h3, h4, h5, h6 { @apply font-display text-ink; }
+}
+::selection { background: var(--color-brand); color: #fff; }
+
+/* Fondo de cuadrícula cartesiana */
+.cartesian-grid {
+  background-image:
+    linear-gradient(to right, rgb(35 179 121 / 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(35 179 121 / 0.08) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* Contenido de las entradas importado de Blogger */
+.post-body {
+  @apply prose prose-lg max-w-none
+    prose-headings:font-display prose-headings:text-ink prose-headings:font-semibold
+    prose-p:text-body prose-li:text-body prose-strong:text-ink
+    prose-a:text-brand prose-a:font-medium hover:prose-a:text-brand-dark
+    prose-blockquote:border-l-brand prose-blockquote:bg-surface prose-blockquote:py-1 prose-blockquote:not-italic
+    prose-img:rounded-2xl prose-img:shadow-lg prose-img:mx-auto
+    prose-table:text-sm prose-th:bg-surface;
+}
+.post-body img { height: auto; max-width: 100%; }
+.post-body .separator a { margin: 0 !important; }
+.post-body iframe { @apply w-full aspect-video rounded-2xl; height: auto; }
+.post-body table { @apply block overflow-x-auto; }
