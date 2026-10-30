@@ -1,0 +1,38 @@
+# Despliega el sitio de PRODUCCIÓN (cuenta Vercel ente518) en cada push a main.
+# El portafolio (cuenta Vercel de Joe3089) se despliega aparte con la integración de Git de Vercel.
+#
+# Requisito único: secreto del repositorio VERCEL_TOKEN_PRODUCCION
+# (Settings → Secrets and variables → Actions → New repository secret)
+# con un token creado en la cuenta ente518 (https://vercel.com/account/settings/tokens).
+name: Deploy producción (ente518)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: produccion
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: team_ANVTxanaJVgY8Gt37u7FrK97
+      VERCEL_PROJECT_ID: prj_l2pA8a1E2fVWCOhz1Eat3Cz2rTTF
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN_PRODUCCION }}
+    steps:
+      - name: Comprobar token
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::Falta el secreto VERCEL_TOKEN_PRODUCCION en el repositorio."
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: npm install --global vercel@latest
+      - name: Desplegar a producción
+        run: vercel deploy --prod --yes --token "$VERCEL_TOKEN"

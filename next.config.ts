@@ -13,6 +13,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "**" },
     ],
   },
+  async headers() {
+    // Refuerzo del noindex para la copia de portafolio (cubre también imágenes y archivos)
+    return process.env.SEO_NOINDEX === "1" ? [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }] : [];
+  },
   async redirects() {
     return [
       // Enlaces antiguos de Blogger

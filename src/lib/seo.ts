@@ -1,6 +1,12 @@
 import { createHash } from "node:crypto";
 import { site } from "./site";
 
+/**
+ * SEO_NOINDEX=1 en un proyecto de Vercel lo saca de los buscadores (p. ej. la copia de portafolio),
+ * para que no compita con el sitio de producción que tiene el mismo contenido.
+ */
+export const indexable = process.env.SEO_NOINDEX !== "1";
+
 export const keywords = [
   "Cartesian Languages",
   "Centro de Formación Académica Cartesian Languages",
@@ -64,7 +70,7 @@ export const organizationLd = () => ({
 export const indexNowKey = createHash("sha256").update(`indexnow:${site.url}`).digest("hex").slice(0, 32);
 
 export async function notifySearchEngines(paths: string[]) {
-  if (process.env.NODE_ENV !== "production" || !paths.length) return { ok: false, status: 0 };
+  if (!indexable || process.env.NODE_ENV !== "production" || !paths.length) return { ok: false, status: 0 };
   const host = new URL(site.url).host;
   try {
     const res = await fetch("https://api.indexnow.org/indexnow", {

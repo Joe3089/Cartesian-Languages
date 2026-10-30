@@ -5,7 +5,7 @@ import { Footer } from "@/components/footer";
 import { DescartesBot } from "@/components/descartes-bot";
 import { getSummaries } from "@/lib/posts";
 import { site } from "@/lib/site";
-import { keywords, organizationLd } from "@/lib/seo";
+import { indexable, keywords, organizationLd } from "@/lib/seo";
 import "./globals.css";
 
 const oswald = Oswald({ subsets: ["latin"], variable: "--font-oswald", display: "swap" });
@@ -21,7 +21,9 @@ export const metadata: Metadata = {
   creator: site.name,
   publisher: site.name,
   category: "education",
-  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
+  robots: indexable
+    ? { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } }
+    : { index: false, follow: false, googleBot: { index: false, follow: false } },
   // Códigos de Google Search Console y Bing Webmaster Tools (variables de entorno en Vercel)
   verification: {
     google: process.env.GOOGLE_SITE_VERIFICATION,
