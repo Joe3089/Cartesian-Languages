@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.name, template: `%s | ${site.shortName}` },
   description: site.description,
-  openGraph: { siteName: site.name, locale: "es_ES", type: "website", images: ["/brand/escudo-1024.png"] },
+  openGraph: { title: site.name, description: site.description, url: "/", siteName: site.name, locale: "es_ES", type: "website", images: [{ url: "/brand/og.jpg", width: 1200, height: 630, alt: site.name }] },
   twitter: { card: "summary_large_image" },
 };
 

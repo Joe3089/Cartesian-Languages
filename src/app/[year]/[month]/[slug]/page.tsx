@@ -28,11 +28,13 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const data = await getPost(toPath(await params));
   if (!data) return {};
   const { post } = data;
+  // Imagen ligera para la vista previa de WhatsApp (mismo formato que usa Blogger)
+  const og = post.image?.includes("googleusercontent") ? post.image.replace("/s1600/", "/w1200-h630-p-k-no-nu/").replace(/=s1600$/, "=w1200-h630-p-k-no-nu") : post.image;
   return {
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: postHref(post) },
-    openGraph: { type: "article", title: post.title, description: post.excerpt, publishedTime: post.published, images: post.image ? [post.image] : [site.logo] },
+    openGraph: { type: "article", title: post.title, description: post.excerpt, publishedTime: post.published, images: og ? [og] : ["/brand/og.jpg"] },
   };
 }
 
