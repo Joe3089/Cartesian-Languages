@@ -56,10 +56,11 @@ export async function startSession() {
   jar.set(DEVICE_COOKIE, "1", { ...base, maxAge: 60 * 60 * 24 * 365 });
 }
 
-export async function endSession() {
+export async function endSession({ forgetDevice = false } = {}) {
   const jar = await cookies();
   jar.delete(COOKIE);
   jar.delete(ROLE_COOKIE);
+  if (forgetDevice) jar.delete(DEVICE_COOKIE);
 }
 
 export async function isAdmin() {

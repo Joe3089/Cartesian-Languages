@@ -27,7 +27,13 @@ export async function login(_: string | null, form: FormData) {
 
 export async function logout() {
   await endSession();
-  redirect("/admin");
+  redirect("/");
+}
+
+/** Cierra sesión y quita la marca del navegador: la web se ve como la ve cualquier visitante. */
+export async function viewAsVisitor() {
+  await endSession({ forgetDevice: true });
+  redirect("/");
 }
 
 export async function updateAccount(_: string | null, form: FormData) {

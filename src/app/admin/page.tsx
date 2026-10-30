@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, ExternalLink, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
+import { CheckCircle2, ExternalLink, Eye, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
 import { currentUsername, isAdmin, isConfigured } from "@/lib/auth";
 import { articlePath } from "@/lib/posts";
 import { readAll, type Case, type Course } from "@/lib/store";
 import { RichEditor } from "@/components/admin/rich-editor";
 import { MediaField } from "@/components/admin/media-field";
-import { deleteItem, logout, saveCase, saveCourse } from "./actions";
+import { deleteItem, logout, saveCase, saveCourse, viewAsVisitor } from "./actions";
 import { AccountForm } from "./account-form";
 import { LoginForm } from "./login-form";
 
@@ -64,9 +64,14 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <h1 className="text-4xl">Panel de administración</h1>
           <p className="mt-1 text-sm">Sesión iniciada como <strong className="text-ink">{username}</strong> · Administrador</p>
         </div>
-        <form action={logout}>
-          <button className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-sm hover:border-brand hover:text-brand"><LogOut className="h-4 w-4" /> Salir</button>
-        </form>
+        <div className="flex flex-wrap gap-2">
+          <form action={viewAsVisitor}>
+            <button title="Cierra sesión y oculta el botón de acceso en este navegador" className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-sm hover:border-brand hover:text-brand"><Eye className="h-4 w-4" /> Ver como visitante</button>
+          </form>
+          <form action={logout}>
+            <button className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-sm hover:border-brand hover:text-brand"><LogOut className="h-4 w-4" /> Salir</button>
+          </form>
+        </div>
       </div>
 
       <nav className="mt-8 flex gap-1 overflow-x-auto border-b-2 border-surface">
