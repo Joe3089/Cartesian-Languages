@@ -11,6 +11,7 @@ import { SocialLinks } from "@/components/social-links";
 import { HomeExtras } from "@/components/home-extras";
 
 export const revalidate = 1800;
+export const metadata = { alternates: { canonical: "/" } };
 
 const icons = [Feather, BookOpen, Languages, Mic, ScrollText];
 

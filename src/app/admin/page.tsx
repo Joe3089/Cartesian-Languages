@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, ExternalLink, Eye, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
+import { CheckCircle2, ExternalLink, Eye, Search, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
 import { currentUsername, isAdmin, isConfigured } from "@/lib/auth";
 import { articlePath } from "@/lib/posts";
 import { readAll, type Case, type Course } from "@/lib/store";
 import { RichEditor } from "@/components/admin/rich-editor";
 import { MediaField } from "@/components/admin/media-field";
-import { deleteItem, logout, saveCase, saveCourse, viewAsVisitor } from "./actions";
+import { deleteItem, logout, pingSearchEngines, saveCase, saveCourse, viewAsVisitor } from "./actions";
 import { AccountForm } from "./account-form";
 import { LoginForm } from "./login-form";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = { title: "Administración", robots: { index: false } };
 
-type Search = Promise<{ tab?: string; edit?: string; ok?: string }>;
+type Search = Promise<{ tab?: string; edit?: string; ok?: string; seo?: string }>;
 
 const input = "w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-ink outline-none focus:border-brand";
 
@@ -53,7 +53,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
     );
   }
 
-  const { tab = "articulos", edit, ok } = await searchParams;
+  const { tab = "articulos", edit, ok, seo } = await searchParams;
   const [articles, courses, cases, username] = await Promise.all([readAll("articles"), readAll("courses"), readAll("cases"), currentUsername()]);
   const counts: Record<string, number> = { articulos: articles.length, cursos: courses.length, casos: cases.length };
 
@@ -90,7 +90,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
             <Link href="/admin/articulos/nuevo" className="flex items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-brand/40 p-5 font-display uppercase tracking-wider text-brand hover:bg-brand/5">
               <Plus className="h-5 w-5" /> Escribir nuevo artículo
             </Link>
-            <p className="text-xs text-muted">Los artículos publicados aquí aparecen junto a los de Blogger en la portada, las secciones, el buscador y el menú.</p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-xs text-muted">Los artículos publicados aquí aparecen junto a los de Blogger en la portada, las secciones, el buscador y el menú. Al publicar se avisa automáticamente a los buscadores.</p>
+              <form action={pingSearchEngines}>
+                <button title="Envía todas las páginas a Bing, Yandex y otros buscadores (IndexNow)" className="flex items-center gap-2 rounded-full border border-brand px-4 py-2 text-xs font-medium text-brand hover:bg-brand hover:text-white"><Search className="h-4 w-4" /> Avisar a los buscadores</button>
+              </form>
+            </div>
+            {seo && <p className={`rounded-xl px-4 py-3 text-sm ${seo === "error" ? "bg-red-50 text-red-700" : "bg-brand/10 text-brand-dark"}`}>{seo === "error" ? "No se pudo contactar con los buscadores. Inténtalo más tarde." : `Enviadas ${seo} páginas a los buscadores.`}</p>}
             {articles.length === 0 && <p className="p-6 text-center text-sm">Todavía no has publicado artículos desde el panel.</p>}
             {articles.map((a) => (
               <div key={a.id} className="flex items-center gap-4 rounded-2xl bg-surface p-4">

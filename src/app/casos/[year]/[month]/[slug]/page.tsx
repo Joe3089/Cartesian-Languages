@@ -27,7 +27,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const post = await find(params);
-  return post ? { title: post.title, description: post.excerpt } : {};
+  return post ? { title: post.title, description: post.excerpt, alternates: { canonical: `/casos/${post.path}` }, openGraph: { type: "article", title: post.title, description: post.excerpt, images: [post.image ?? "/brand/og.jpg"] } } : {};
 }
 
 export default async function BlogCasePage({ params }: Params) {

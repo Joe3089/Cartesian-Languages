@@ -12,7 +12,8 @@ type Params = { params: Promise<{ id: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const item = await readOne("cases", (await params).id);
-  return item ? { title: item.title, description: item.summary, openGraph: item.image ? { images: [item.image] } : undefined } : {};
+  const id = (await params).id;
+  return item ? { title: item.title, description: item.summary, alternates: { canonical: `/casos/c/${id}` }, openGraph: { type: "article", title: item.title, description: item.summary, images: [item.image || "/brand/og.jpg"] } } : {};
 }
 
 export default async function CasePage({ params }: Params) {

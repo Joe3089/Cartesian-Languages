@@ -1,6 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { notifySearchEngines } from "@/lib/seo";
+import { articlePath } from "@/lib/posts";
 import { redirect } from "next/navigation";
 import { currentUsername, endSession, isAdmin, startSession, updateCredentials, verify } from "@/lib/auth";
 import { readAll, remove, slugify, upsert, type Article, type Case, type Course } from "@/lib/store";
@@ -80,6 +83,7 @@ export async function saveArticle(form: FormData) {
   };
   await upsert("articles", article);
   refresh();
+  if (article.status === "published") after(() => notifySearchEngines(["/", `/${articlePath(article)}`, "/sitemap.xml"]));
   redirect(`/admin/articulos/${article.id}?ok=1`);
 }
 
@@ -98,6 +102,7 @@ export async function saveCourse(form: FormData) {
   };
   await upsert("courses", course);
   refresh();
+  after(() => notifySearchEngines(["/cursos"]));
   redirect("/admin?tab=cursos&ok=1");
 }
 
@@ -115,6 +120,7 @@ export async function saveCase(form: FormData) {
   };
   await upsert("cases", item);
   refresh();
+  after(() => notifySearchEngines(["/casos", `/casos/c/${item.id}`]));
   redirect("/admin?tab=casos&ok=1");
 }
 
@@ -127,4 +133,13 @@ export async function deleteItem(form: FormData) {
   await remove(kind, str(form, "id"));
   refresh();
   redirect(`/admin?tab=${TABS[kind]}`);
+}
+
+/** Envía todas las páginas del sitemap a los buscadores compatibles con IndexNow. */
+export async function pingSearchEngines() {
+  await guard();
+  const { default: sitemap } = await import("../sitemap");
+  const urls = (await sitemap()).map((e) => e.url).slice(0, 10000);
+  const r = await notifySearchEngines(urls);
+  redirect(`/admin?tab=articulos&seo=${r.ok ? urls.length : "error"}`);
 }

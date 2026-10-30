@@ -8,14 +8,34 @@ import { Reveal } from "@/components/reveal";
 export const revalidate = 1800;
 export const metadata: Metadata = {
   title: "Cursos",
-  description: "Cursos de idiomas de Cartesian Languages con el método lógico-deductivo Cartesiano.",
+  description: "Cursos de idiomas de Cartesian Languages con el método lógico-deductivo Cartesiano: inglés y más, con clases en Google Classroom.",
+  alternates: { canonical: "/cursos" },
 };
 
 export default async function CoursesPage() {
   const [courses, blogPosts] = await Promise.all([readAll("courses"), getPosts(site.blogs.cursos).catch(() => [])]);
 
+  // Datos estructurados de cursos (resultados enriquecidos en Google)
+  const coursesLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: courses.map((c, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "Course",
+        name: c.title,
+        description: c.description,
+        inLanguage: "es",
+        url: `${site.url}/cursos`,
+        provider: { "@type": "EducationalOrganization", name: site.name, sameAs: site.url },
+      },
+    })),
+  };
+
   return (
     <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(coursesLd) }} />
       <header className="relative overflow-hidden bg-nav text-white">
         <div className="cartesian-grid absolute inset-0" />
         <div className="relative mx-auto max-w-7xl px-5 py-16 md:py-24">

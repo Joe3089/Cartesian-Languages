@@ -10,6 +10,7 @@ export const revalidate = 1800;
 export const metadata: Metadata = {
   title: "Casos Empíricos Cartesianos",
   description: "Casos prácticos del método Cartesiano aplicados a la vida cotidiana, la educación y la comunicación.",
+  alternates: { canonical: "/casos" },
 };
 
 type Item = { key: string; href: string; title: string; summary: string; image: string | null; date: string; video: boolean };
