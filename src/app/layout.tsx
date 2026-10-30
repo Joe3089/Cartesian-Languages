@@ -31,8 +31,8 @@ export const metadata: Metadata = {
   },
   openGraph: { title: site.name, description: site.description, url: "/", siteName: site.name, locale: "es_ES", type: "website", images: [
       // Imagen JPEG estándar (no progresiva): WhatsApp no procesa bien las progresivas
-      { url: "/brand/og-1200x630.jpg", secureUrl: "/brand/og-1200x630.jpg", type: "image/jpeg", width: 1200, height: 630, alt: site.name },
-      { url: "/brand/og-600.jpg", secureUrl: "/brand/og-600.jpg", type: "image/jpeg", width: 600, height: 600, alt: site.name },
+      { url: "/brand/og-1200x630.jpg", type: "image/jpeg", width: 1200, height: 630, alt: site.name },
+      { url: "/brand/og-600.jpg", type: "image/jpeg", width: 600, height: 600, alt: site.name },
     ],
   },
   twitter: { card: "summary_large_image", title: site.name, description: site.description, images: ["/brand/og-1200x630.jpg"] },
