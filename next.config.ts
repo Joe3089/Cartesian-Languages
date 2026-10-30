@@ -14,8 +14,11 @@ const nextConfig: NextConfig = {
     ],
   },
   async headers() {
-    // Refuerzo del noindex para la copia de portafolio (cubre también imágenes y archivos)
-    return process.env.SEO_NOINDEX === "1" ? [{ source: "/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] }] : [];
+    // Imágenes de marca accesibles para los generadores de vistas previas (WhatsApp, redes sociales)
+    const brand = { source: "/brand/:file*", headers: [{ key: "Access-Control-Allow-Origin", value: "*" }, { key: "Cache-Control", value: "public, max-age=86400" }] };
+    // Refuerzo del noindex para la copia de portafolio (solo páginas: las imágenes de vista previa deben seguir accesibles)
+    const noindex = { source: "/((?!brand/|_next/).*)", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow" }] };
+    return process.env.SEO_NOINDEX === "1" ? [brand, noindex] : [brand];
   },
   async redirects() {
     return [

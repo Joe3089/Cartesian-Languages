@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     title: post.title,
     description: post.excerpt,
     alternates: { canonical: postHref(post) },
-    openGraph: { type: "article", title: post.title, description: post.excerpt, publishedTime: post.published, images: og ? [og] : ["/brand/og.jpg"] },
+    openGraph: { type: "article", title: post.title, description: post.excerpt, publishedTime: post.published, images: og ? [og] : ["/brand/og-1200x630.jpg"] },
   };
 }
 

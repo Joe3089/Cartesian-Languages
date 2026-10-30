@@ -47,7 +47,7 @@ export const organizationLd = () => ({
       alternateName: site.shortName,
       url: site.url,
       logo: { "@type": "ImageObject", url: `${site.url}/brand/escudo-1024.png`, width: 1024, height: 1024 },
-      image: `${site.url}/brand/og.jpg`,
+      image: `${site.url}/brand/og-1200x630.jpg`,
       description: site.description,
       foundingDate: "2023",
       knowsLanguage: ["es", "en"],
