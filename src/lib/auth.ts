@@ -37,20 +37,29 @@ export async function verify(username: string, password: string) {
   return safeEqual(username.toLowerCase(), c.username.toLowerCase()) && safeEqual(hashPassword(password, c.salt), c.hash);
 }
 
+/**
+ * Marcas visibles para el navegador (sin datos sensibles; la seguridad real es la cookie firmada):
+ * - ROLE_COOKIE: hay una sesión de administrador activa.
+ * - DEVICE_COOKIE: este navegador pertenece al administrador (persiste al cerrar sesión),
+ *   para mostrarle el botón "Iniciar sesión" que los visitantes no ven.
+ */
+export const ROLE_COOKIE = "cl_role";
+export const DEVICE_COOKIE = "cl_device";
+
 export async function startSession() {
   const c = await getCredentials();
   if (!c) return;
-  (await cookies()).set(COOKIE, sign(c), {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
+  const jar = await cookies();
+  const base = { secure: process.env.NODE_ENV === "production", sameSite: "lax" as const, path: "/" };
+  jar.set(COOKIE, sign(c), { ...base, httpOnly: true, maxAge: 60 * 60 * 24 * 7 });
+  jar.set(ROLE_COOKIE, "admin", { ...base, maxAge: 60 * 60 * 24 * 7 });
+  jar.set(DEVICE_COOKIE, "1", { ...base, maxAge: 60 * 60 * 24 * 365 });
 }
 
 export async function endSession() {
-  (await cookies()).delete(COOKIE);
+  const jar = await cookies();
+  jar.delete(COOKIE);
+  jar.delete(ROLE_COOKIE);
 }
 
 export async function isAdmin() {

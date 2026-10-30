@@ -1,13 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { ChevronDown, Menu, Search, X } from "lucide-react";
+import { ChevronDown, LayoutDashboard, LogIn, Menu, Search, X } from "lucide-react";
 import { labelHref, postHref, type PostSummary } from "@/lib/blogger";
 import { sections, site } from "@/lib/site";
 import { SearchDialog } from "./search-dialog";
+
+type Role = "visitor" | "device" | "admin";
+
+/** Rol según las marcas que deja el inicio de sesión (solo afecta a lo que se muestra). */
+function readRole(): Role {
+  const c = document.cookie;
+  if (/(?:^|; )cl_role=admin/.test(c)) return "admin";
+  if (/(?:^|; )cl_device=1/.test(c)) return "device";
+  return "visitor";
+}
 
 function sectionTree(posts: PostSummary[]) {
   return sections.map((s) => ({
@@ -21,6 +31,8 @@ function sectionTree(posts: PostSummary[]) {
 
 export function Header({ posts }: { posts: PostSummary[] }) {
   const pathname = usePathname();
+  const router = useRouter();
+  const [role, setRole] = useState<Role>("visitor");
   const [open, setOpen] = useState<string | null>(null);
   const [mobile, setMobile] = useState(false);
   const [search, setSearch] = useState(false);
@@ -30,6 +42,12 @@ export function Header({ posts }: { posts: PostSummary[] }) {
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 120);
     const onKey = (e: KeyboardEvent) => {
+      // Acceso discreto al panel desde cualquier equipo: Ctrl + Alt + A
+      if (e.ctrlKey && e.altKey && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        router.push("/admin");
+        return;
+      }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setSearch(true);
@@ -42,11 +60,12 @@ export function Header({ posts }: { posts: PostSummary[] }) {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("keydown", onKey);
     };
-  }, []);
+  }, [router]);
 
   useEffect(() => {
     setOpen(null);
     setMobile(false);
+    setRole(readRole());
   }, [pathname]);
 
   return (
@@ -62,6 +81,7 @@ export function Header({ posts }: { posts: PostSummary[] }) {
               <p className="mt-1 hidden max-w-3xl text-sm text-tagline md:line-clamp-2">{site.description}</p>
             </div>
           </Link>
+          <AdminButton role={role} className="ml-auto hidden shrink-0 sm:flex" />
         </div>
       </div>
 
@@ -180,6 +200,7 @@ export function Header({ posts }: { posts: PostSummary[] }) {
                 <span className="font-display text-xl">Menú</span>
                 <button onClick={() => setMobile(false)} aria-label="Cerrar menú"><X /></button>
               </div>
+              {role !== "visitor" && <AdminButton role={role} className="m-4 flex justify-center" />}
               <Link href="/" className="block px-5 py-3 font-display uppercase hover:bg-brand">Tòisich</Link>
               {tree.map((s) => (
                 <details key={s.title} className="group border-t border-white/5">
@@ -216,6 +237,20 @@ function NavLink({ href, active, children }: { href: string; active: boolean; ch
   return (
     <Link href={href} className={`block whitespace-nowrap px-2.5 py-4 2xl:px-3.5 font-display text-sm uppercase tracking-wide text-white transition-colors hover:bg-brand ${active ? "bg-brand" : ""}`}>
       {children}
+    </Link>
+  );
+}
+
+function AdminButton({ role, className = "" }: { role: Role; className?: string }) {
+  if (role === "visitor") return null;
+  const admin = role === "admin";
+  return (
+    <Link
+      href="/admin"
+      className={`items-center gap-2 rounded-full px-5 py-2.5 font-display text-sm uppercase tracking-wider shadow-md transition hover:-translate-y-0.5 ${admin ? "bg-brand text-white shadow-brand/30 hover:bg-brand-dark" : "border-2 border-brand bg-white text-brand hover:bg-brand hover:text-white"} ${className}`}
+    >
+      {admin ? <LayoutDashboard className="h-4 w-4" /> : <LogIn className="h-4 w-4" />}
+      {admin ? "Panel de administración" : "Iniciar sesión"}
     </Link>
   );
 }
