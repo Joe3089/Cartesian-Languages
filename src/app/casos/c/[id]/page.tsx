@@ -43,11 +43,15 @@ export default async function CasePage({ params }: Params) {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={item.image} alt={item.title} className="mb-10 w-full rounded-2xl shadow-2xl" />
         ) : null}
-        <div className="post-body">
-          {item.content.split(/\n\s*\n/).map((block, i) =>
-            block.startsWith("#") ? <h2 key={i}>{block.replace(/^#+\s*/, "")}</h2> : <p key={i} className="whitespace-pre-line">{block}</p>,
-          )}
-        </div>
+        {item.content.trim().startsWith("<") ? (
+          <div className="post-body" dangerouslySetInnerHTML={{ __html: item.content }} />
+        ) : (
+          <div className="post-body">
+            {item.content.split(/\n\s*\n/).map((block, i) =>
+              block.startsWith("#") ? <h2 key={i}>{block.replace(/^#+\s*/, "")}</h2> : <p key={i} className="whitespace-pre-line">{block}</p>,
+            )}
+          </div>
+        )}
       </div>
     </article>
   );

@@ -48,7 +48,7 @@ const decode = (s: string) =>
     .replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(Number(n)))
     .replace(/&amp;/g, "&");
 
-const toText = (html: string) =>
+export const toText = (html: string) =>
   decode(html.replace(/<style[\s\S]*?<\/style>|<script[\s\S]*?<\/script>/gi, " ").replace(/<[^>]+>/g, " "))
     .replace(/\s+/g, " ")
     .trim();
@@ -108,29 +108,6 @@ export async function getPosts(blog: string = site.blogger): Promise<Post[]> {
 
 export const summarize = ({ html: _html, ...rest }: Post): PostSummary => rest;
 
-export async function getSummaries() {
-  return (await getPosts()).map(summarize);
-}
-
-export async function getPost(path: string) {
-  const posts = await getPosts();
-  const i = posts.findIndex((p) => p.path === path);
-  if (i === -1) return null;
-  const post = posts[i];
-  const related = posts
-    .filter((p) => p.id !== post.id)
-    .map((p) => ({ p, score: p.labels.filter((l) => post.labels.includes(l)).length }))
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 3)
-    .map((x) => summarize(x.p));
-  return {
-    post,
-    newer: i > 0 ? summarize(posts[i - 1]) : null,
-    older: i < posts.length - 1 ? summarize(posts[i + 1]) : null,
-    related,
-  };
-}
 
 export const labelHref = (label: string) => `/categoria/${encodeURIComponent(label)}`;
 export const postHref = (p: { path: string }) => `/${p.path}`;

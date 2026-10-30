@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getPosts, getSummaries, labelHref } from "@/lib/blogger";
+import { labelHref } from "@/lib/blogger";
+import { getAllPosts, getSummaries } from "@/lib/posts";
 import { sections } from "@/lib/site";
 import { PostCard } from "@/components/post-card";
 import { Reveal } from "@/components/reveal";
@@ -11,7 +12,7 @@ export const revalidate = 1800;
 type Params = { params: Promise<{ label: string }> };
 
 export async function generateStaticParams() {
-  const labels = new Set((await getPosts()).flatMap((p) => p.labels));
+  const labels = new Set((await getAllPosts()).flatMap((p) => p.labels));
   return [...labels].map((label) => ({ label }));
 }
 

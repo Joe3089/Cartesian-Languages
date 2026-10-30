@@ -3,7 +3,7 @@ import { Oswald, Roboto } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DescartesBot } from "@/components/descartes-bot";
-import { getSummaries } from "@/lib/blogger";
+import { getSummaries } from "@/lib/posts";
 import { site } from "@/lib/site";
 import "./globals.css";
 
@@ -14,9 +14,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: { default: site.name, template: `%s | ${site.shortName}` },
   description: site.description,
-  openGraph: { siteName: site.name, locale: "es_ES", type: "website", images: [site.logo] },
+  openGraph: { siteName: site.name, locale: "es_ES", type: "website", images: ["/brand/escudo-1024.png"] },
   twitter: { card: "summary_large_image" },
-  icons: { icon: site.logo },
 };
 
 export const viewport: Viewport = { themeColor: "#232323" };

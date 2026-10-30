@@ -1,7 +1,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowUpRight, BookOpen, Feather, Languages, Mic, ScrollText } from "lucide-react";
-import { formatDate, getSummaries, labelHref, postHref } from "@/lib/blogger";
+import { formatDate, labelHref, postHref } from "@/lib/blogger";
+import { getSummaries } from "@/lib/posts";
 import { sections, site } from "@/lib/site";
 import { PostGrid } from "@/components/post-grid";
 import { Podcast } from "@/components/podcast";

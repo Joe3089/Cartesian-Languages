@@ -61,3 +61,22 @@
 .post-body .separator a { margin: 0 !important; }
 .post-body iframe { @apply w-full aspect-video rounded-2xl; height: auto; }
 .post-body table { @apply block overflow-x-auto; }
+
+/* Contenido creado con el editor del panel */
+.post-body video.cl-video { @apply mx-auto my-8 w-full max-h-[80vh] rounded-2xl bg-black shadow-2xl; }
+.post-body div[data-youtube-video] iframe { @apply my-8; }
+.post-body td, .post-body th { @apply border border-black/10 px-3 py-2 align-top; }
+.post-body mark { @apply rounded px-0.5; }
+.post-body img[style*="width"] { display: inline-block; }
+
+/* Editor (Tiptap) */
+.tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  @apply pointer-events-none float-left h-0 text-soft;
+}
+.tiptap .ProseMirror-selectednode { @apply outline-2 outline-offset-2 outline-brand; }
+.tiptap .selectedCell { @apply bg-brand/10; }
+.tiptap .column-resize-handle { @apply absolute -right-0.5 top-0 bottom-0 w-1 bg-brand; }
+.tiptap .tableWrapper { @apply overflow-x-auto; }
+.tiptap table { @apply relative; }
+.tiptap [data-resize-handle] { @apply rounded-sm bg-brand; }

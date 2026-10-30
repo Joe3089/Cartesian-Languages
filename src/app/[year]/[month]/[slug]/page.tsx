@@ -3,7 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound, permanentRedirect } from "next/navigation";
 import { ArrowLeft, ArrowRight, Clock } from "lucide-react";
-import { formatDate, getPost, getPosts, labelHref, postHref } from "@/lib/blogger";
+import { formatDate, labelHref, postHref } from "@/lib/blogger";
+import { getAllPosts, getPost } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { PostCard } from "@/components/post-card";
 import { ReadingProgress, ShareButtons } from "@/components/post-extras";
@@ -16,7 +17,7 @@ type Params = { params: Promise<{ year: string; month: string; slug: string }> }
 const toPath = ({ year, month, slug }: Awaited<Params["params"]>) => `${year}/${month}/${decodeURIComponent(slug).replace(/\.html$/, "")}`;
 
 export async function generateStaticParams() {
-  const posts = await getPosts();
+  const posts = await getAllPosts();
   return posts.map((p) => {
     const [year, month, slug] = p.path.split("/");
     return { year, month, slug };

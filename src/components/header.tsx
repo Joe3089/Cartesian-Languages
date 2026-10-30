@@ -75,17 +75,14 @@ export function Header({ posts }: { posts: PostSummary[] }) {
             <Menu className="h-6 w-6" />
           </button>
 
-          <AnimatePresence>
-            {scrolled && (
-              <motion.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -10 }}>
-                <Link href="/" className="mr-2 hidden items-center gap-2 font-display text-lg tracking-wide text-white xl:flex">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={site.logo} alt="" className="h-8 w-8 rounded-full" />
-                  CFA
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          <Link href="/" aria-label="Inicio" className="group relative mr-2 block h-14 w-14 shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={site.logo}
+              alt={site.shortName}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 rounded-full shadow-lg ring-2 ring-white/80 transition-all duration-500 group-hover:rotate-6 group-hover:scale-105 ${scrolled ? "h-12 w-12" : "h-16 w-16"}`}
+            />
+          </Link>
 
           <ul className="hidden flex-1 xl:flex">
             <li>

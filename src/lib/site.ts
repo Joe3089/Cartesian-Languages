@@ -7,14 +7,14 @@ export const site = {
     "Servicios de Traducción y Redacción Académica-Profesional, aplicando Lenguajes Especializados de Regulación (LER). Transformamos ideas complejas en contenido reflexivo y conciso. Aplicamos técnicas de comunicación asertiva a través del método lógico-deductivo Cartesiano garantizando una comunicación global, integral y de calidad.",
   blogger: "https://cfacartesianlanguages.blogspot.com",
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://cartesian-languages.vercel.app",
-  logo: "https://blogger.googleusercontent.com/img/a/AVvXsEiLQqh1Jdl4st7Z6odRDLADjZ_9cwfHGyxOCB3hjnEZYVEQ1B_7kvcX6K7fizbGRkkDph76bBrKLDvKFHT1hxj6ggYIyd82TYTaBVql-ngdtwFmlqHfuF8qyGUPWz4vWpT9e201h9MiIaIi4Zz57pzUoS3TMO7muwVKhH4NwlHGNij0no6qcYEsWQfGc-k=s1600",
+  logo: "/brand/escudo.webp",
   whatsapp:
     "https://wa.me/351935639418?text=Hola%2C%20deseo%20informaci%C3%B3n%20sobre%20sus%20servicios%20ling%C3%BC%C3%ADsticos%20en%20cuanto%20a%3A%0A1)%20Idiomas%0A2)%20Traducci%C3%B3n%0A3)%20Redacci%C3%B3n%0A4)%20Oratoria%0A5)%20Dise%C3%B1o%20de%20Logos",
   chatbot: {
     name: "Cartesian Dkarbeg 5:18",
     title: "René Descartes: IA Racionalista",
     url: "https://entecognitae-cartesiandkarbeg-518.hf.space",
-    avatar: `${IMG}/AVvXsEjSY_PiQADrcRPVgUVkkrS-ANeBvrjCjrq38IzWZCxJj35ks7INS3NL3Nuj7QrPOkz7Rh2v-KmYz43glJL7OModCIGSIxMf-u7qQx6Q8_SD2BDWR0LnHOxhodz-mlM7pVzSO9W3XIbsSgNeDbUv3hyvPX7Drew_3EyD41hEuY7SL7In_a4WITQla75dIy4/s320/System%20Prompt.png`,
+    avatar: "/brand/descartes.webp",
   },
   services: ["Idiomas", "Traducción", "Redacción", "Oratoria", "Diseño de Logos"],
   blogs: {

@@ -16,13 +16,27 @@ export type Case = {
   id: string;
   title: string;
   summary: string;
-  content: string; // párrafos separados por línea en blanco
+  content: string; // HTML del editor (o texto plano en casos antiguos)
   image: string;
   videoUrl: string;
   createdAt: string;
 };
 
-type Collections = { courses: Course; cases: Case };
+export type Article = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  cover: string;
+  labels: string[];
+  html: string;
+  status: "draft" | "published";
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+type Collections = { courses: Course; cases: Case; articles: Article };
 type Name = keyof Collections;
 
 /** Curso inicial: siempre presente hasta que el administrador lo modifique. */
@@ -41,6 +55,7 @@ const seed: { [K in Name]: Collections[K][] } = {
     },
   ],
   cases: [],
+  articles: [],
 };
 
 const file = (name: Name) => `data/${name}.json`;
