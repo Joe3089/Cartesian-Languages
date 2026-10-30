@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { CheckCircle2, ExternalLink, Eye, Search, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
+import { BarChart3, CheckCircle2, ExternalLink, Eye, Search, FileText, GraduationCap, LogOut, Microscope, Pencil, Plus, Trash2, UserCog } from "lucide-react";
 import { currentUsername, isAdmin, isConfigured } from "@/lib/auth";
 import { articlePath } from "@/lib/posts";
 import { readAll, type Case, type Course } from "@/lib/store";
+import { getReport, statsEnabled } from "@/lib/stats";
+import { VisitsReport } from "@/components/admin/visits-report";
 import { RichEditor } from "@/components/admin/rich-editor";
 import { MediaField } from "@/components/admin/media-field";
 import { deleteItem, logout, pingSearchEngines, saveCase, saveCourse, viewAsVisitor } from "./actions";
@@ -18,6 +20,7 @@ type Search = Promise<{ tab?: string; edit?: string; ok?: string; seo?: string }
 const input = "w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-ink outline-none focus:border-brand";
 
 const TABS = [
+  { id: "estadisticas", label: "Estadísticas", icon: BarChart3 },
   { id: "articulos", label: "Artículos", icon: FileText },
   { id: "cursos", label: "Cursos", icon: GraduationCap },
   { id: "casos", label: "Casos prácticos", icon: Microscope },
@@ -54,7 +57,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
   }
 
   const { tab = "articulos", edit, ok, seo } = await searchParams;
-  const [articles, courses, cases, username] = await Promise.all([readAll("articles"), readAll("courses"), readAll("cases"), currentUsername()]);
+  const [articles, courses, cases, username, report] = await Promise.all([
+    readAll("articles"), readAll("courses"), readAll("cases"), currentUsername(), getReport().catch(() => null),
+  ]);
   const counts: Record<string, number> = { articulos: articles.length, cursos: courses.length, casos: cases.length };
 
   return (
@@ -64,6 +69,20 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
           <h1 className="text-4xl">Panel de administración</h1>
           <p className="mt-1 text-sm">Sesión iniciada como <strong className="text-ink">{username}</strong> · Administrador</p>
         </div>
+        {/* Contador de visitas: solo visible para el administrador */}
+        <Link href="/admin?tab=estadisticas" title="Ver reporte de visitas" className="flex items-center gap-4 rounded-2xl bg-nav px-5 py-3 text-white shadow-lg transition hover:-translate-y-0.5">
+          <BarChart3 className="h-7 w-7 text-brand" />
+          <span>
+            <span className="block text-[11px] uppercase tracking-wider text-white/60">Visitas totales</span>
+            <span className="font-display text-3xl tabular-nums leading-none">{report ? report.total.toLocaleString("es-ES") : "—"}</span>
+          </span>
+          {report && (
+            <span className="border-l border-white/15 pl-4">
+              <span className="block text-[11px] uppercase tracking-wider text-white/60">Hoy</span>
+              <span className="font-display text-2xl tabular-nums leading-none">{report.today.toLocaleString("es-ES")}</span>
+            </span>
+          )}
+        </Link>
         <div className="flex flex-wrap gap-2">
           <form action={viewAsVisitor}>
             <button title="Cierra sesión y oculta el botón de acceso en este navegador" className="flex items-center gap-2 rounded-full border border-black/10 px-4 py-2 text-sm hover:border-brand hover:text-brand"><Eye className="h-4 w-4" /> Ver como visitante</button>
@@ -126,6 +145,20 @@ export default async function AdminPage({ searchParams }: { searchParams: Search
         )}
 
         {tab === "cuenta" && <AccountForm username={username} />}
+
+        {tab === "estadisticas" &&
+          (report ? (
+            <VisitsReport report={report} />
+          ) : (
+            <div className="rounded-3xl bg-surface p-8">
+              <h2 className="text-2xl">Contador de visitas sin activar</h2>
+              <p className="mt-2 max-w-2xl text-sm">
+                {statsEnabled
+                  ? "No se pudo leer la base de datos de estadísticas. Inténtalo de nuevo en unos minutos."
+                  : "Falta conectar la base de datos de estadísticas (Upstash Redis) a este proyecto en Vercel: Storage → Create Database → Upstash for Redis → conectar al proyecto, y volver a desplegar."}
+              </p>
+            </div>
+          ))}
       </div>
     </section>
   );

@@ -19,6 +19,7 @@
     "@tiptap/pm": "^3.32.2",
     "@tiptap/react": "^3.32.2",
     "@tiptap/starter-kit": "^3.32.2",
+    "@upstash/redis": "^1.40.0",
     "@vercel/blob": "^2.8.2",
     "lucide-react": "^1.63.0",
     "motion": "^14.7.1",

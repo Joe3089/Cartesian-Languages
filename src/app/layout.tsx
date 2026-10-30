@@ -3,6 +3,7 @@ import { Oswald, Roboto } from "next/font/google";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DescartesBot } from "@/components/descartes-bot";
+import { VisitTracker } from "@/components/visit-tracker";
 import { getSummaries } from "@/lib/posts";
 import { site } from "@/lib/site";
 import { indexable, keywords, organizationLd } from "@/lib/seo";
@@ -50,6 +51,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <main className="min-h-[60vh]">{children}</main>
         <Footer />
         <DescartesBot />
+        <VisitTracker />
       </body>
     </html>
   );
