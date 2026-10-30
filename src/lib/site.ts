@@ -17,9 +17,13 @@ export const site = {
     avatar: `${IMG}/AVvXsEjSY_PiQADrcRPVgUVkkrS-ANeBvrjCjrq38IzWZCxJj35ks7INS3NL3Nuj7QrPOkz7Rh2v-KmYz43glJL7OModCIGSIxMf-u7qQx6Q8_SD2BDWR0LnHOxhodz-mlM7pVzSO9W3XIbsSgNeDbUv3hyvPX7Drew_3EyD41hEuY7SL7In_a4WITQla75dIy4/s320/System%20Prompt.png`,
   },
   services: ["Idiomas", "Traducción", "Redacción", "Oratoria", "Diseño de Logos"],
+  blogs: {
+    casos: "https://casosempiricoscartesianos.blogspot.com",
+    cursos: "https://cartesianlanguagescourses.blogspot.com",
+  },
   links: [
-    { label: "Casos Empíricos Cartesianos", href: "https://casosempiricoscartesianos.blogspot.com/" },
-    { label: "Cartesian Languages Courses", href: "https://cartesianlanguagescourses.blogspot.com/" },
+    { label: "Casos Empíricos Cartesianos", href: "/casos" },
+    { label: "Cartesian Languages Courses", href: "/cursos" },
   ],
   social: [
     { name: "YouTube", href: "https://www.youtube.com/channel/UCNhQ4ZJWOhdTb2BZV9Uqpxg?sub_confirmation=1", icon: `${IMG}/AVvXsEgGxjm__TS1-sOnf69Vbppx-u8CX1ltlmqqtDey3Gml5aV2kZ1BJsK94hMPF-cn870hd7Jk1bx9E50oPbA1fanb90M_2eoVUnnlSQ-Q_axbKVsDmsla6hPg-mRT-9FsPx0coSeVLmQppAbN/s0/Youtube-icono.png` },

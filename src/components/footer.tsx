@@ -32,7 +32,7 @@ export function Footer() {
             <h3 className="mb-4 text-lg uppercase tracking-wider">Cartesian Languages</h3>
             <ul className="space-y-2 text-sm">
               {site.links.map((l) => (
-                <li key={l.href}><a href={l.href} target="_blank" rel="noopener noreferrer" className="hover:text-brand">{l.label}</a></li>
+                <li key={l.href}><Link href={l.href} className="hover:text-brand">{l.label}</Link></li>
               ))}
             </ul>
             <SocialLinks className="mt-6" />

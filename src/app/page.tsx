@@ -7,6 +7,7 @@ import { PostGrid } from "@/components/post-grid";
 import { Podcast } from "@/components/podcast";
 import { Reveal } from "@/components/reveal";
 import { SocialLinks } from "@/components/social-links";
+import { HomeExtras } from "@/components/home-extras";
 
 export const revalidate = 1800;
 
@@ -114,6 +115,8 @@ export default async function Home() {
         </Reveal>
         <PostGrid posts={posts} />
       </section>
+
+      <HomeExtras />
 
       <Podcast />
 

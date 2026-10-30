@@ -95,7 +95,7 @@ export function Header({ posts }: { posts: PostSummary[] }) {
               <li key={s.title} onMouseEnter={() => setOpen(s.title)}>
                 <button
                   onClick={() => setOpen(open === s.title ? null : s.title)}
-                  className={`flex items-center gap-1 whitespace-nowrap px-3 py-4 font-display text-sm uppercase tracking-wide text-white transition-colors hover:bg-brand ${open === s.title ? "bg-brand" : ""}`}
+                  className={`flex items-center gap-1 whitespace-nowrap px-2.5 py-4 2xl:px-3.5 font-display text-sm uppercase tracking-wide text-white transition-colors hover:bg-brand ${open === s.title ? "bg-brand" : ""}`}
                   aria-expanded={open === s.title}
                 >
                   {s.title}
@@ -105,6 +105,12 @@ export function Header({ posts }: { posts: PostSummary[] }) {
             ))}
             <li>
               <NavLink href="/#podcast" active={false}>Podcast</NavLink>
+            </li>
+            <li>
+              <NavLink href="/casos" active={pathname.startsWith("/casos")}>Casos</NavLink>
+            </li>
+            <li>
+              <NavLink href="/cursos" active={pathname.startsWith("/cursos")}>Cursos</NavLink>
             </li>
           </ul>
 
@@ -196,7 +202,9 @@ export function Header({ posts }: { posts: PostSummary[] }) {
                   </div>
                 </details>
               ))}
-              <Link href="/#podcast" className="block border-t border-white/5 px-5 py-3 font-display uppercase hover:bg-brand">Podcast</Link>
+              {[["/#podcast","Podcast"],["/casos","Casos Empíricos"],["/cursos","Cursos"]].map(([href,label])=>(
+                <Link key={href} href={href} className="block border-t border-white/5 px-5 py-3 font-display uppercase hover:bg-brand">{label}</Link>
+              ))}
             </motion.aside>
           </>
         )}
@@ -209,7 +217,7 @@ export function Header({ posts }: { posts: PostSummary[] }) {
 
 function NavLink({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
-    <Link href={href} className={`block whitespace-nowrap px-3 py-4 font-display text-sm uppercase tracking-wide text-white transition-colors hover:bg-brand ${active ? "bg-brand" : ""}`}>
+    <Link href={href} className={`block whitespace-nowrap px-2.5 py-4 2xl:px-3.5 font-display text-sm uppercase tracking-wide text-white transition-colors hover:bg-brand ${active ? "bg-brand" : ""}`}>
       {children}
     </Link>
   );

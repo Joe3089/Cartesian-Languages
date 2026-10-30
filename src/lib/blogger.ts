@@ -29,7 +29,7 @@ type Entry = {
   media$thumbnail?: { url: string };
 };
 
-const FEED = `${site.blogger}/feeds/posts/default?alt=json&max-results=500`;
+const feedUrl = (blog: string) => `${blog}/feeds/posts/default?alt=json&max-results=500`;
 
 /** Pide la imagen de Blogger en alta resolución. */
 export function hiRes(url: string, size = 1600) {
@@ -99,8 +99,8 @@ function normalize(e: Entry): Post {
 }
 
 /** Lee todas las entradas del feed público de Blogger (ISR: se refresca cada 30 min). */
-export async function getPosts(): Promise<Post[]> {
-  const res = await fetch(FEED, { next: { revalidate: 1800, tags: ["posts"] } });
+export async function getPosts(blog: string = site.blogger): Promise<Post[]> {
+  const res = await fetch(feedUrl(blog), { next: { revalidate: 1800, tags: ["posts"] } });
   if (!res.ok) throw new Error(`Blogger feed ${res.status}`);
   const data = (await res.json()) as { feed: { entry?: Entry[] } };
   return (data.feed.entry ?? []).map(normalize);
